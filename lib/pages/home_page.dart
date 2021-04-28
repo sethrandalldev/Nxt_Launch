@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String launchName = '';
   DateTime launchTime = DateTime.now();
+  dynamic crew;
 
   @override
   void initState() {
@@ -30,6 +31,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         launchName = jsonResponse['name'];
         launchTime = DateTime.parse(jsonResponse['date_utc']);
+        crew = jsonResponse['crew'];
       });
     }
   }
@@ -40,15 +42,17 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: Center(child: Text(launchName, style: TextStyle(fontSize: 40)))),
-          Expanded(
-            child: Center(
-              child: Text(
-                formatDate(launchTime, [M, ' ', dd, ', ', yyyy]),
-                style: TextStyle(fontSize: 30)
-              )
+          Card(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: Text(launchName),
+                  subtitle: Text(formatDate(launchTime, [M, ' ', dd, ', ', yyyy]) + '; ' + (crew != null && crew.length > 0 ? 'Crew size: ${crew.length}' : 'Uncrewed'))
+                )
+              ],
             )
-          )
+          ),
         ],
       )
     );

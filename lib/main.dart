@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:spacex_launches/pages/authentication_page.dart';
 import 'package:spacex_launches/pages/home_page.dart';
+import 'package:spacex_launches/pages/login_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,9 +17,9 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Next Launch', style: TextStyle(fontSize: 30))
+          title: Text('Nxt Launch', style: TextStyle(fontSize: 30))
         ),
-        body: HomePage()
+        body: AuthenticationPage()
       )
     );
   }
