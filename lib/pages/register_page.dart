@@ -5,11 +5,19 @@ import 'package:flutter_session/flutter_session.dart';
 import 'package:spacex_launches/models/user.dart';
 import 'package:spacex_launches/pages/login_page.dart';
 import 'package:http/http.dart' as http;
-import 'package:crypt/crypt.dart';
 
 import 'home_page.dart';
 
 class RegisterPage extends StatefulWidget {
+
+  Function setAuthenticated;
+  Function setOnLogin;
+
+  RegisterPage(setAuthenticated, setOnLogin) {
+    this.setAuthenticated = setAuthenticated;
+    this.setOnLogin = setOnLogin;
+  }
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -46,6 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
       var json = jsonDecode(response.body);
       User user = new User(id: json['_id'], email: json['email']);
       await FlutterSession().set("user", user);
+      widget.setAuthenticated();
     }
   }
 
@@ -133,7 +142,7 @@ class _RegisterPageState extends State<RegisterPage> {
             height: 130,
           ),
           TextButton(
-            onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => LoginPage())), 
+            onPressed: () => widget.setOnLogin, 
             child: Text('Already Registered? Log In')
           )
         ],

@@ -1,5 +1,6 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_session/flutter_session.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:convert';
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getLaunchInfo() async {
-    var url = 'https://api.spacexdata.com/v4/launches/next';
+    var url = Uri.parse('https://api.spacexdata.com/v4/launches/next');
     var response = await http.get(url);
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);
@@ -46,6 +47,12 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                FutureBuilder(
+                  future: FlutterSession().get('user'),
+                  builder: (context, snapshot) {
+                    return Text(snapshot.hasData ? snapshot.data.toString() : 'Loading...');
+                  }
+                ),
                 ListTile(
                   title: Text(launchName),
                   subtitle: Text(formatDate(launchTime, [M, ' ', dd, ', ', yyyy]) + '; ' + (crew != null && crew.length > 0 ? 'Crew size: ${crew.length}' : 'Uncrewed'))
